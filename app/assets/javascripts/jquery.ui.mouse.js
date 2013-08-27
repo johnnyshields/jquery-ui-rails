@@ -51,7 +51,7 @@ $.widget("ui.mouse", {
 	_mouseDestroy: function() {
 		this.element.unbind("."+this.widgetName);
 		if ( this._mouseMoveDelegate ) {
-			$(document)
+			this.document
 				.unbind("mousemove."+this.widgetName, this._mouseMoveDelegate)
 				.unbind("mouseup."+this.widgetName, this._mouseUpDelegate);
 		}
@@ -102,9 +102,10 @@ $.widget("ui.mouse", {
 		this._mouseUpDelegate = function(event) {
 			return that._mouseUp(event);
 		};
-		$(document)
-			.bind("mousemove."+this.widgetName, this._mouseMoveDelegate)
-			.bind("mouseup."+this.widgetName, this._mouseUpDelegate);
+
+		this.document
+			.bind( "mousemove." + this.widgetName, this._mouseMoveDelegate )
+			.bind( "mouseup." + this.widgetName, this._mouseUpDelegate );
 
 		event.preventDefault();
 
@@ -116,6 +117,10 @@ $.widget("ui.mouse", {
 		// IE mouseup check - mouseup happened when mouse was out of window
 		if ($.ui.ie && ( !document.documentMode || document.documentMode < 9 ) && !event.button) {
 			return this._mouseUp(event);
+		}
+		// Iframe mouseup check - mouseup occurred in another document
+		else if ( !event.which ) {
+			return this._mouseUp( event );
 		}
 
 		if (this._mouseStarted) {
@@ -133,9 +138,9 @@ $.widget("ui.mouse", {
 	},
 
 	_mouseUp: function(event) {
-		$(document)
-			.unbind("mousemove."+this.widgetName, this._mouseMoveDelegate)
-			.unbind("mouseup."+this.widgetName, this._mouseUpDelegate);
+		this.document
+			.unbind( "mousemove." + this.widgetName, this._mouseMoveDelegate )
+			.unbind( "mouseup." + this.widgetName, this._mouseUpDelegate );
 
 		if (this._mouseStarted) {
 			this._mouseStarted = false;
@@ -147,6 +152,7 @@ $.widget("ui.mouse", {
 			this._mouseStop(event);
 		}
 
+		mouseHandled = false;
 		return false;
 	},
 
