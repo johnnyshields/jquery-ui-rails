@@ -82,7 +82,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 		var o = this.options;
 
-		$( document.activeElement ).blur();
+		// $( document.activeElement ).blur();
 
 		// among others, prevent a drag on a resizable-handle
 		if (this.helper || o.disabled || $(event.target).closest(".ui-resizable-handle").length > 0) {
