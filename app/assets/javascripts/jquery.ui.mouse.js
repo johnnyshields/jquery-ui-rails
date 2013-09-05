@@ -119,9 +119,10 @@ $.widget("ui.mouse", {
 			return this._mouseUp(event);
 		}
 		// Iframe mouseup check - mouseup occurred in another document
-		else if ( !event.which ) {
-			return this._mouseUp( event );
-		}
+		// SHIELDS COMMENTED OUT
+		// else if ( !event.which ) {
+		// 	return this._mouseUp( event );
+		// }
 
 		if (this._mouseStarted) {
 			this._mouseDrag(event);
